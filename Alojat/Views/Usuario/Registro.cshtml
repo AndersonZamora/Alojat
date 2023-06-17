@@ -1,0 +1,68 @@
+﻿@model Usuario
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="container">
+    <div class="mt-1">
+        <div class="card border-dark mb-3">
+            <div class="card-header text-white bg-dark">
+                <h3>Registro de Usuario</h3>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Usuario" asp-action="Registro" method="post">
+                    <div class="row g-2">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombres</label>
+                                <input required type="text" class="form-control" asp-for="Nombres" placeholder="Ingrese sus nombres">
+                                <span asp-validation-for="Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Apellidos</label>
+                                <input required type="text" class="form-control" asp-for="Apellidos" placeholder="Ingrese sus apellidos">
+                                <span asp-validation-for="Apellidos" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Fecha de Nacimiento</label>
+                                <input required class="form-control" asp-for="FechaNacimiento">
+                                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Número de Celular</label>
+                                <input required type="tel" class="form-control" asp-for="NumCelular" placeholder="Ingrese su número de celular">
+                                <span asp-validation-for="NumCelular" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Dirección de Domicilio</label>
+                                <input required type="text" class="form-control" asp-for="DireccionDomicilio" placeholder="Ingrese su dirección">
+                                <span asp-validation-for="DireccionDomicilio" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Correo</label>
+                                <input required type="email" class="form-control" asp-for="Email" placeholder="Ingrese su correo electrónico">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input required type="password" class="form-control" asp-for="Password" placeholder="Ingrese su contraseña">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Rol</label>
+                                <select required asp-for="RolID" asp-items="@ViewBag.roles" class="form-control">
+                                    <option disabled selected>--Seleccionar Rol--</option>
+                                </select>
+                                <span asp-validation-for="RolID" class="text-danger"></span>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Registrar Usuario</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

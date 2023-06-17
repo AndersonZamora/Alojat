@@ -1,0 +1,72 @@
+﻿@model Usuario
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+        <div class="row">
+            <style>
+                .bg-register-image {
+                    background: url(https://e.rpp-noticias.io/xlarge/2022/02/20/084208_1220264.jpg) !important;
+                    background-position: center !important;
+                    background-size: cover !important;
+                }
+            </style>
+            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+            <div class="col-lg-7">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Crear una Cuenta!</h1>
+                    </div>
+                    <form class="user" asp-controller="Login" asp-action="Registro" method="post">
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="text" class="form-control" asp-for="Nombres" placeholder="Nombres">
+                                <span asp-validation-for="Nombres" class="text-danger"></span>
+                                <hr/>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" asp-for="Apellidos" placeholder="Apellidos">
+                                <span asp-validation-for="Apellidos" class="text-danger"></span>
+                                   <hr/>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" asp-for="DireccionDomicilio" placeholder="Ingrese su dirección">
+                                <span asp-validation-for="DireccionDomicilio" class="text-danger"></span>
+                                <hr />
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control" asp-for="NumCelular" placeholder="Ingrese su número de celular">
+                                <span asp-validation-for="NumCelular" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" asp-for="FechaNacimiento">
+                            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" asp-for="Email" placeholder="Correo">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12 mb-3 mb-sm-0">
+                                <div class="form-group">
+                                    <input required type="password" class="form-control" asp-for="Password" placeholder="Contraseña">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-user btn-block"> Registrar Cuenta</button>
+                        <hr>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <a asp-controller="Login" asp-action="Login" class="small">¿Ya tienes una cuenta? Login!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

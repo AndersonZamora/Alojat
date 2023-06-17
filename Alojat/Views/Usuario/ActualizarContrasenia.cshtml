@@ -1,0 +1,34 @@
+﻿@model Alojat.Models.Usuario
+@{
+    ViewData["Title"] = "ActualizarContrasenia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card border-dark mb-3">
+                <div class="card-header text-white bg-dark">
+                    <h3>Actualizar Contraseña</h3>
+                </div>
+                <div class="card-body">
+                    <p>Ingrese una nueva contraseña.</p><hr />
+                    <form asp-controller="Usuario" asp-action="ActualizarContrasenia" method="post">
+                        <input hidden asp-for="UsuarioID" />
+                        <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" asp-for="Password" >
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <button type="submit" class="btn btn-success">Actualizar Contraseña</button>
+                        <button asp-action="Index" class="btn btn-primary">Cancelar</button>
+                   
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,118 @@
+﻿@model Alojat.Models.Servicio
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="mt-0">
+    <div class="card border-dark mb-3">
+        <div class="card-header text-white bg-dark">
+            <h3>Registro de Servicio</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" asp-controller="Servicio" method="POST" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-dark mb-3 mb-1">Registrar</button>
+                <div class="row g-2">
+                    <style>
+                        .upload {
+                            width: 100px;
+                            position: relative;
+                            margin: auto;
+                        }
+
+                            .upload .round {
+                                position: absolute;
+                                bottom: 0;
+                                right: 0;
+                                background: #00B4FF;
+                                width: 32px;
+                                height: 32px;
+                                line-height: 33px;
+                                text-align: center;
+                                border-radius: 50%;
+                                overflow: hidden;
+                            }
+
+                                .upload .round input[type = "file"] {
+                                    position: absolute;
+                                    transform: scale(2);
+                                    opacity: 0;
+                                }
+
+                        input[type=file]::-webkit-file-upload-button {
+                            cursor: pointer;
+                        }
+
+                    </style>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="upload mb-3">
+                            <img src="~/img/undraw_profile_1.svg" id="img" width=100 height=100 alt="">
+                            <div class="round">
+                                <input accept="image/" name="Imagen" id="foto" type="file" />
+                                <i class="fa fa-camera" style="color: #fff;"></i>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ubicación de Piso</label>
+                            <input asp-for="UbicacionPiso" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Ubicacion")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea asp-for="DescripcionServicio" class="form-control"></textarea>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Descripcion")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control" asp-items="@ViewBag.CategoriaID"></select>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Categoria")</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de servicio</label>
+                            <input type="tel" asp-for="TipoServicio" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Tipo")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Precio</label>
+                            <input type="number" value="" asp-for="Precio" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Precio")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="EstadoAlquilerServicio" role="" id="flexSwitchCheckChecked" checked>
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Estado</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Inmueble</label>
+                            <select asp-for="InmuebleID" class="form-control" asp-items="ViewBag.InmuebleID"></select>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Inmueble")</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const file = document.getElementById('foto');
+    const img = document.getElementById('img');
+    file.addEventListener('change', e => {
+        if (e.target.files[0]) {
+            if (e.target.files[0].type == 'image/jpeg' | e.target.files[0].type == 'image/png' | e.target.files[0].type == 'image/jpg') {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                }
+
+                reader.readAsDataURL(e.target.files[0])
+            }
+        } else {
+            img.src = defaultFile;
+        }
+    });
+
+</script>

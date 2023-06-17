@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Alojat.Models.ServicioDetail>
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+
+@foreach (var item in Model)
+{
+
+    <br />
+    <br />
+    <div class="card">
+        <form asp-action="Buscar" asp-controller="Buscar" method="post">
+            <input hidden name="Tipo" value="@item.Categoria" />
+            <input hidden name="Referencia" value="@item.Punto" />
+            <button style="margin:18px;" type="submit" class="btn btn-dark">Atras</button>
+            <hr>
+        </form>
+
+        <div class="row g-0">
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h5 class="card-title">@item.TipoServicio</h5>
+
+                    <input hidden id="latitud" value="@item.Latitud" class="form-control" />
+                    <input hidden id="longitud" value="@item.Longitud" class="form-control" />
+                    <p class="card-text">@item.DescripcionServicio</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Ubicación:</strong> @item.UbicacionPiso</li>
+                        <li class="list-group-item"><strong>Precio:</strong> @item.Precio</li>
+                        <li class="list-group-item"><strong>Dirección:</strong> @item.Direc</li>
+                        <li class="list-group-item"><strong>Celular:</strong> @item.Celular</li>
+                        @if (@item.EstadoAlquilerServicio)
+                        {
+                            <li class="list-group-item"><strong>Estado: Disponible</strong></li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item"><strong>Estado:</strong>Alquilado</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <img src="@Url.Content(item.ImagenServicio)" style="max-width:100%; width:100%; height:100%; max-height: 100%;" class="card-img-top" alt="...">
+            </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+            <div id="mapa" style="width:100%; height:500px;"></div>
+        </div>
+
+    </div>
+}
+<script>
+
+    const file = document.getElementById('latitud').value;
+    const img = document.getElementById('longitud').value;
+
+
+    function iniciarMapa() {
+        var latitud = file;
+        var longitud = img
+
+        coordenas = {
+            lng: longitud,
+            lat: latitud
+        }
+
+        generarMapa(coordenas)
+    }
+
+    function generarMapa(coordenas) {
+        var mapa = new google.maps.Map(document.getElementById('mapa'),
+            {
+                zoom: 14,
+                center: new google.maps.LatLng(coordenas.lat, coordenas.lng)
+            });
+
+        marcador = new google.maps.Marker({
+            map: mapa,
+            draggable: false,
+            position: new google.maps.LatLng(coordenas.lat, coordenas.lng)
+        });
+
+        marcador.addListener('dragend', function (event) {
+            document.getElementById("latitud").value = this.getPosition().lat();
+            document.getElementById("longitud").value = this.getPosition().lng();
+        })
+    }
+</script>
