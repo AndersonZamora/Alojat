@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Alojat.Models.Inmueble>
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <h6 class="m-0 font-weight-bold text-primary mt-3">Inmuebles</h6>
+            </div>
+            <div class="col-md-6 text-center">
+                <a asp-controller="Inmueble" asp-action="Create" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Direccion</th>
+                        <th>Celular</th>
+                        <th>Punto</th>
+                        <th>Propietario</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Direccion</th>
+                        <th>Celular</th>
+                        <th>Punto</th>
+                        <th>Propietario</th>
+                        <th>Opciones</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DireccionInmueble)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumCelular)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PuntoReferencia.NombrePuntoReferencia)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usuario.Nombres)
+                                @Html.DisplayFor(modelItem => item.Usuario.Apellidos)
+                            </td>
+                            <td>
+                                <a class="fas fa-eye" title="Detalle" asp-action="Details" asp-route-id="@item.InmuebleID"></a> |
+                                <a class="fas fa-delete"
+                               style="cursor:pointer"
+                               data-toggle="modal"
+                               data-target="#del-@item.InmuebleID">
+                                    <i class="fa-sharp fa-solid fa-trash" style="color:red;"></i>
+                                </a>
+                                <div class="modal fade" id="del-@item.InmuebleID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">¿Estas seguro?</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">¡No podrás revertir esto!</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-primary"
+                                               asp-action="Delete"
+                                               asp-route-id="@item.InmuebleID">
+                                                    Eliminar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

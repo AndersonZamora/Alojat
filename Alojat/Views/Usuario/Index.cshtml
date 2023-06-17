@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Usuario>
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <h6 class="m-0 font-weight-bold text-primary mt-3">Usuarios</h6>
+            </div>
+            <div class="col-md-6 text-center">
+                <a asp-controller="Usuario" asp-action="Registro" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Número de Celular</th>
+                        <th>Dirección</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Número de Celular</th>
+                        <th>Dirección</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Opciones</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombres</td>
+                            <td>@item.Apellidos</td>
+                            <td>@item.FechaNacimiento</td>
+                            <td>@item.NumCelular</td>
+                            <td>@item.DireccionDomicilio</td>
+                            <td>@item.Email</td>
+                            <td>@item.Rol.DescripcionRol</td>
+                            <td>
+                                <a class="fas fa-edit" title="Editar" asp-controller="Usuario" asp-action="Editar" asp-route-id="@item.UsuarioID"></a> |
+                                <a
+                                    class="fas fa-eye"
+                                    title="Detalle"
+                                    data-toggle="modal"
+                                    data-target="#det-@item.UsuarioID">
+                                </a>
+                                <div class="modal fade" id="det-@item.UsuarioID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="card-body">
+                                                    <form>
+                                                        <div class="row g-2">
+                                                            <div class="col-sm-6 col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Nombres</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.Nombres" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Apellidos</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.Apellidos" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Fecha de Nacimiento</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.FechaNacimiento" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Numero de Celular</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.NumCelular" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6 col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Dirección de Domicilio</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.DireccionDomicilio" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Correo</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.Email" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Fecha de Registro</label>
+                                                                    <input disabled type="text" class="form-control" value="@item.FechaRegistro" />
+                                                                </div>
+                                                                <br />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-primary" type="button" data-dismiss="modal">Cerrar</button>
+                                                <a class="btn btn-danger"
+                                               asp-action="Eliminar"
+                                               asp-route-id="@item.UsuarioID">
+                                                    Eliminar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+

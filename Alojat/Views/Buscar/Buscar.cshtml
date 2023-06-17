@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Alojat.Models.CatPun>
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<h1 class="text-center">Busca tu Servicio</h1>
+
+<h5>@ViewBag.file</h5>
+<h5>@ViewBag.image</h5>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="card 0.2 border-secondary mb-3 pt-3 pb-3 col-md-12">
+            <div class="container">
+                <form asp-action="Buscar">
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Tipo de Servicio</label>
+                            <select id="Tipo" name="Tipo" class="form-control" asp-items="ViewBag.Categoria">
+                                <option disabled selected>--Seleccionar Tipo--</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Punto de Referencia</label>
+                            <select disabled id="Referencia" name="Referencia" class="form-control" asp-items="ViewBag.PuntoReferencia">
+                                <option disabled selected>--Seleccionar Punto de Referencia--</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mt-3">
+                            <div align="center">
+                                <input disabled type="submit" id="Buscar" value="Buscar" class="btn btn-dark" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<h2>Alojamientos Cercanos a tu Preferencia</h2>
+<div class="container">
+    <div class="row">
+        <div class="card 0.2 border-secondary mb-3 pt-3 pb-3 col-md-12">
+            <div class="container">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-md-3">
+                            <img src="@Url.Content(item.ImagenInmueble)" id="img" width=100 height=100 alt="">
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Dirección:</strong> @item.DireccionInmueble</p>
+                            <p><strong>Referencias:</strong> @item.NombrePuntoReferencia</p>
+                            <p><strong>Precio:</strong> @item.Precio</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div align="right">
+                                        <a class="btn btn-dark" asp-controller="Buscar" asp-route-id="@item.ServicioID" asp-action="Details">Detalles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const file = document.getElementById('Tipo');
+    const img = document.getElementById('Referencia');
+
+    document.getElementById('Tipo').addEventListener('change', function () {
+        document.getElementById('Referencia').disabled = false;
+    });
+
+    document.getElementById('Referencia').addEventListener('change', function () {
+        console.log('You selected2: ', this.value);
+        document.getElementById("Buscar").disabled = false;
+    });
+
+
+</script>

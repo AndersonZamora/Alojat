@@ -1,0 +1,128 @@
+﻿@model Alojat.Models.Inmueble
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="mt-0">
+    <div class="card border-dark mb-3">
+        <div class="card-header text-white bg-dark">
+            <h3>Detalle de Inmueble</h3>
+        </div>
+        <h5>@ViewBag.image</h5>
+
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-dark mb-3 mb-1">Actualizar</button>
+                <div class="row g-2">
+                    <style>
+                        .upload {
+                            width: 100px;
+                            position: relative;
+                            margin: auto;
+                        }
+
+                            .upload .round {
+                                position: absolute;
+                                bottom: 0;
+                                right: 0;
+                                background: #00B4FF;
+                                width: 32px;
+                                height: 32px;
+                                line-height: 33px;
+                                text-align: center;
+                                border-radius: 50%;
+                                overflow: hidden;
+                            }
+
+                                .upload .round input[type = "file"] {
+                                    position: absolute;
+                                    transform: scale(2);
+                                    opacity: 0;
+                                }
+
+                        input[type=file]::-webkit-file-upload-button {
+                            cursor: pointer;
+                        }
+
+                    </style>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="upload mb-3">
+                            <img src="@Url.Content(Model.ImagenInmueble)" id="img" width=100 height=100 alt="">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dirección</label>
+                             <input hidden asp-for="InmuebleID" class="form-control" />
+                            <input hidden asp-for="UsuarioID" class="form-control" />
+                            <input asp-for="DireccionInmueble" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Dirección")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Longitud</label>
+                            <input id="longitud" asp-for="LongitudInmueble" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Longitud")</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Celular</label>
+                            <label asp-for="NumCelular" class="control-label"></label>
+                            <input type="tel" asp-for="NumCelular" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Celular")</strong></p>
+                            @* <span asp-validation-for="NumCelular" class="text-danger"></span>*@
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Punto de Referencia</label>
+                            <select asp-for="PuntoReferenciaID" class="form-control" asp-items="ViewBag.PuntoReferenciaID"></select>
+                            @*<span asp-validation-for="PuntoReferenciaID" class="text-danger"></span>*@
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Punto")</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Latitud</label>
+                            <input id="latitud" asp-for="LatitudInmueble" class="form-control" />
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Latitud")</strong></p>
+                            @*  <span asp-validation-for="LatitudInmueble" class="text-danger"></span>*@
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="mapa" style="width:100%; height:500px;"></div>
+    </div>
+</div>
+
+<script>
+    const file = document.getElementById('latitud').value;
+    const img = document.getElementById('longitud').value;
+
+
+    function iniciarMapa() {
+        var latitud = file;
+        var longitud = img
+
+        coordenas = {
+            lng: longitud,
+            lat: latitud
+        }
+
+        generarMapa(coordenas)
+    }
+
+    function generarMapa(coordenas) {
+        var mapa = new google.maps.Map(document.getElementById('mapa'),
+            {
+                zoom: 14,
+                center: new google.maps.LatLng(coordenas.lat, coordenas.lng)
+            });
+
+        marcador = new google.maps.Marker({
+            map: mapa,
+            draggable: false,
+            position: new google.maps.LatLng(coordenas.lat, coordenas.lng)
+        });
+
+        marcador.addListener('dragend', function (event) {
+            document.getElementById("latitud").value = this.getPosition().lat();
+            document.getElementById("longitud").value = this.getPosition().lng();
+        })
+    }
+</script>

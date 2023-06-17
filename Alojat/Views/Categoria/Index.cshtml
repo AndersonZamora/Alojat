@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Alojat.Models.Categoria>
+@{
+    Layout = "~/Views/Shared/_LayoutAlojat.cshtml";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 ">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <h6 class="m-0 font-weight-bold text-primary mt-3">Categorias</h6>
+            </div>
+            <div class="col-md-6 text-center">
+                <a asp-controller="Categoria" asp-action="Create" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Categoria</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>CategoriaID</th>
+                        <th>Categoria</th>
+                        <th>Opciones</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CategoriaID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NombreCategoria)
+                            </td>
+                            <td>
+                                <a class="fas fa-edit" title="Editar" asp-action="Edit" asp-route-id="@item.CategoriaID"></a> |
+                                <a class="fas fa-delete"
+                               data-toggle="modal"
+                               data-target="#del-@item.CategoriaID">
+                                    <i class="fa-sharp fa-solid fa-trash" style="color:red;"></i>
+                                </a>
+
+                                <div class="modal fade" id="del-@item.CategoriaID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">¿Estas seguro?</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">¡No podrás revertir esto!</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-primary"
+                                                asp-action="Delete"
+                                                asp-route-id="@item.CategoriaID">
+                                                    Eliminar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
