@@ -47,24 +47,31 @@ namespace Alojat.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel usuario)
         {
-            if (!mVusuario.Validate(usuario, ModelState))
+            try
+            {
+                if (!mVusuario.Validate(usuario, ModelState))
+                {
+                    return View();
+                }
+
+                var usu = mUsuario.ValidarUsuario(usuario.Email, usuario.Password);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, usu.Nombres),
+                    new Claim(ClaimTypes.Email, usu.Email),
+                    new Claim(ClaimTypes.Role, usu.Rol.DescripcionRol),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception)
             {
                 return View();
             }
-
-            var usu = mUsuario.ValidarUsuario(usuario.Email, usuario.Password);
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, usu.Nombres),
-                new Claim(ClaimTypes.Email, usu.Email),
-                new Claim(ClaimTypes.Role, usu.Rol.DescripcionRol),
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()
