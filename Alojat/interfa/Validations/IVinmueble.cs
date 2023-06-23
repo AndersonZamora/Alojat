@@ -6,6 +6,5 @@ namespace Alojat.interfa
     public interface IVinmueble
     {
         bool Validate(Inmueble inmueble, ModelStateDictionary modelState);
-        void ValidateUpdate(Inmueble inmueble);
     }
 }

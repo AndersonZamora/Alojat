@@ -59,33 +59,70 @@ namespace Alojat.service
             dbContext.SaveChanges();
         }
 
-        public void SaveUsuarioRegistro(Usuario usuario)
+        public void SaveUsuarioRegistro(RegistroUsuario registro)
         {
-            usuario.Password = sha.ConvertirSha256(usuario.Password);
-            usuario.RolID = 3;
-            usuario.FechaRegistro = DateTime.Now;
+            Usuario usuario = new()
+            {
+                Nombres = registro.Nombres,
+                Apellidos = registro.Apellidos,
+                FechaNacimiento = registro.FechaNacimiento,
+                NumCelular = registro.NumCelular,
+                DireccionDomicilio = registro.DireccionDomicilio,
+                Email = registro.Email,
+                Password = sha.ConvertirSha256(registro.Password),
+                RolID = 1,
+                FechaRegistro = DateTime.Now
+            };
+
             dbContext.Usuario.Add(usuario);
             dbContext.SaveChanges();
         }
 
         public void UpdateUsuario(Usuario usuario)
         {
-            var query = from u in dbContext.Usuario where u.UsuarioID == usuario.UsuarioID select u.Password;
-            usuario.Password = query.ToString();
+            var usuarioDB = dbContext.Usuario.Where(u => u.UsuarioID == usuario.UsuarioID).FirstOrDefault();
 
-            dbContext.Usuario.Update(usuario);
+            usuarioDB.Nombres = usuario.Nombres;
+            usuarioDB.Apellidos = usuario.Apellidos;
+            usuarioDB.FechaNacimiento = usuario.FechaNacimiento;
+            usuarioDB.NumCelular = usuario.NumCelular;
+            usuarioDB.DireccionDomicilio = usuario.DireccionDomicilio;
+            usuarioDB.Email = usuario.Email;
+            usuarioDB.RolID = usuario.RolID;
+
+            dbContext.SaveChanges();
+        }
+
+        public void UpdateUsuarioPass(UserUpdate usuario)
+        {
+            var usuarioDB = dbContext.Usuario.Where(u => u.UsuarioID == usuario.UsuarioID).FirstOrDefault();
+
+            var newPass = usuario.Password = sha.ConvertirSha256(usuario.Password);
+
+            usuarioDB.Password = newPass;
+
             dbContext.SaveChanges();
         }
 
         public Usuario ValidarUsuario(string correo, string clave)
         {
-            clave = sha.ConvertirSha256(clave);
+            try
+            {
+                clave = sha.ConvertirSha256(clave);
 
-            var usuario = dbContext.Usuario.Include(r => r.Rol)
-                                            .Where(u => u.Email == correo)
-                                            .Where(u => u.Password == clave)
-                                            .FirstOrDefault();
-            return usuario;
+                var usuario = dbContext.Usuario.Include(r => r.Rol)
+                                                .Where(u => u.Email == correo)
+                                                .Where(u => u.Password == clave)
+                                                .FirstOrDefault();
+
+                if (usuario == null) return new();
+
+                return usuario;
+            }
+            catch (Exception)
+            {
+                return new();
+            }
         }
     }
 }

@@ -6,35 +6,25 @@ namespace Alojat.service.Validations
 {
     public class SVservicio : IVservicio
     {
-        private ModelStateDictionary modelState;
+        ModelStateDictionary modelState;
+
+        private readonly IValidarCampos validarCampos;
+        public SVservicio(IValidarCampos validarCampos)
+        {
+            this.validarCampos = validarCampos;
+        }
 
         public bool Validate(Servicio servicio, ModelStateDictionary modelState)
         {
             this.modelState = modelState;
 
-            if (!ValidarImagen(servicio.UbicacionPiso))
-            {
-                modelState.AddModelError("Ubicacion", "Ubicación requerida");
-                return false;
-            }
+            if (!ValidarPiso(servicio.UbicacionPiso)) return false;
 
-            if (!ValidarImagen(servicio.DescripcionServicio))
-            {
-                modelState.AddModelError("Descripcion", "Descripción requerida");
-                return false;
-            }
+            if (!ValidarDescrip(servicio.DescripcionServicio)) return false;
 
-            if (!ValidarImagen(servicio.TipoServicio))
-            {
-                modelState.AddModelError("Tipo", "Tipo de servicio");
-                return false;
-            }
+            if (!ValidarTipo(servicio.TipoServicio)) return false;
 
-            if (servicio.Precio == 0)
-            {
-                modelState.AddModelError("Precio", "Precio requerido");
-                return false;
-            }
+            if (!ValidarPrecio(servicio.Precio.ToString())) return false;
 
             if (servicio.CategoriaID == 0)
             {
@@ -51,14 +41,78 @@ namespace Alojat.service.Validations
             return true;
         }
 
-        public void ValidateUpdate(Servicio servicio)
+        bool ValidarPiso(string piso)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(piso))
+            {
+                modelState.AddModelError("Piso", "Este campo es requerido");
+                return false;
+            }
+
+            if (!validarCampos.ValidarLetrasNumeros(piso))
+            {
+                modelState.AddModelError("Piso", "Solo ingrese letras y numeros");
+                return false;
+            }
+
+            return true;
         }
 
-        private static bool ValidarImagen(string servicio)
+        bool ValidarPrecio(string precio)
         {
-            return (!string.IsNullOrEmpty(servicio));
+            if (string.IsNullOrEmpty(precio))
+            {
+                modelState.AddModelError("Precio", "Este campo es requerido");
+                return false;
+            }
+
+            if (!validarCampos.Precio(precio))
+            {
+                modelState.AddModelError("Precio", "Ingrese un precio valido");
+                return false;
+            }
+
+            return true;
+        }
+
+        bool ValidarTipo(string tipo)
+        {
+            if (string.IsNullOrEmpty(tipo))
+            {
+                modelState.AddModelError("Tipo", "Este campo es requerido");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(tipo))
+            {
+                modelState.AddModelError("Tipo", "Solo ingrese letras");
+                return false;
+            }
+
+            if (!validarCampos.ValidarSoloLetras(tipo))
+            {
+                modelState.AddModelError("Tipo", "Ingrese solo letras");
+                return false;
+            }
+
+            return true;
+        }
+
+        bool ValidarDescrip(string descrip)
+        {
+            if (string.IsNullOrEmpty(descrip))
+            {
+                modelState.AddModelError("Descrip", "Este campo es requerido");
+                return false;
+            }
+
+            if (!validarCampos.ValidarLetrasNumeros(descrip))
+            {
+                modelState.AddModelError("Descrip", "Solo ingrese letras y numeros");
+                return false;
+            }
+
+            return true;
         }
     }
 }

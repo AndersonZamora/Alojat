@@ -1,7 +1,6 @@
 ﻿using Alojat.Data;
 using Alojat.interfa;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Alojat.service
 {

@@ -14,42 +14,47 @@
                     <input hidden asp-for="UsuarioID" />
                     <div class="mb-3">
                         <label class="form-label">Nombres</label>
+                        <input hidden asp-for="UsuarioID" class="form-control" />
                         <input type="text" class="form-control" asp-for="Nombres" placeholder="Ingrese sus nombres">
-                        <span asp-validation-for="Nombres" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Nombre")</strong></p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Apellidos</label>
                         <input type="text" class="form-control" asp-for="Apellidos" placeholder="Ingrese sus apellidos">
-                        <span asp-validation-for="Apellidos" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Apellido")</strong></p><span asp-validation-for="Apellidos" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Fecha de Nacimiento</label>
                         <input class="form-control" asp-for="FechaNacimiento">
-                        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Fecha")</strong></p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Número de Celular</label>
                         <input type="tel" class="form-control" asp-for="NumCelular" placeholder="Ingrese su número de celular">
-                        <span asp-validation-for="NumCelular" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Celular")</strong></p>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Dirección de Domicilio</label>
                         <input type="text" class="form-control" asp-for="DireccionDomicilio" placeholder="Ingrese su dirección">
-                        <span asp-validation-for="DireccionDomicilio" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Direccion")</strong></p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Correo</label>
                         <input type="email" class="form-control" asp-for="Email" placeholder="Ingrese su correo electrónico">
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Correo")</strong></p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Rol</label>
                         <select asp-for="RolID" asp-items="@ViewBag.roles" class="form-control">
                             <option disabled selected>--Seleccionar Rol--</option>
                         </select>
-                        <span asp-validation-for="RolID" class="text-danger"></span>
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Rol")</strong></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Contra")</strong></p>
                     </div>
                 </div>
             </div>
@@ -83,8 +88,8 @@
                             <input hidden asp-for="UsuarioID" />
                             <div class="mb-3">
                                 <label class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" asp-for="Password">
-                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <input type="Password" class="form-control" name="Password">
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Contra")</strong></p>
                             </div>
                             <br />
                             <button class="btn btn-primary" type="button" data-dismiss="modal">Cerrar</button>

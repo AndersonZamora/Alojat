@@ -23,38 +23,38 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control" asp-for="Nombres" placeholder="Nombres">
-                                <span asp-validation-for="Nombres" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Nombre")</strong></p>
                                 <hr/>
                             </div>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" asp-for="Apellidos" placeholder="Apellidos">
-                                <span asp-validation-for="Apellidos" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Apellido")</strong></p>
                                    <hr/>
                             </div>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" asp-for="DireccionDomicilio" placeholder="Ingrese su dirección">
-                                <span asp-validation-for="DireccionDomicilio" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Direccion")</strong></p>
                                 <hr />
                             </div>
                             <div class="col-sm-6">
                                 <input type="tel" class="form-control" asp-for="NumCelular" placeholder="Ingrese su número de celular">
-                                <span asp-validation-for="NumCelular" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Celular")</strong></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <input class="form-control" asp-for="FechaNacimiento">
-                            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Fecha")</strong></p>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" asp-for="Email" placeholder="Correo">
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input class="form-control" asp-for="Email" placeholder="Correo">
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Correo")</strong></p>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-sm-12 mb-3 mb-sm-0">
                                 <div class="form-group">
-                                    <input required type="password" class="form-control" asp-for="Password" placeholder="Contraseña">
-                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <input type="password" class="form-control" asp-for="Password" placeholder="Contraseña">
+                                    <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Contra")</strong></p>
                                 </div>
                             </div>
                         </div>

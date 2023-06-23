@@ -2,6 +2,7 @@
 using Alojat.interfa;
 using Alojat.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moq;
 
 namespace TestNunit
@@ -16,7 +17,7 @@ namespace TestNunit
             List<PuntoReferencia> list = new();
 
             mockReferencia.Setup(v => v.LisReferencia()).Returns(list);
-            var controller = new PuntoController(mockReferencia.Object);
+            var controller = new PuntoController(mockReferencia.Object, null);
 
             var events = controller.Index();
             Assert.IsNotNull(events);
@@ -32,7 +33,7 @@ namespace TestNunit
             List<PuntoReferencia> list = new();
 
             mockReferencia.Setup(v => v.FirstPunto(1)).Returns(new PuntoReferencia()); ;
-            var controller = new PuntoController(mockReferencia.Object);
+            var controller = new PuntoController(mockReferencia.Object, null);
 
             var events = controller.Details(1);
             Assert.IsNotNull(events);
@@ -44,11 +45,15 @@ namespace TestNunit
         public void DebePoderCrear()
         {
             var mockReferencia = new Mock<IReferencia>();
+            var mockValidate = new Mock<IVpunto>();
 
             PuntoReferencia punto = new();
+            ModelStateDictionary modelState = new();
 
             mockReferencia.Setup(v => v.SavePunto(punto));
-            var controller = new PuntoController(mockReferencia.Object);
+            mockValidate.Setup(v => v.Validate(punto,modelState)).Returns(true);
+
+            var controller = new PuntoController(mockReferencia.Object, mockValidate.Object);
 
             var events = controller.Create(punto);
             Assert.IsNotNull(events);
@@ -62,9 +67,10 @@ namespace TestNunit
             var mockReferencia = new Mock<IReferencia>();
 
             PuntoReferencia punto = new();
-
+         
             mockReferencia.Setup(v => v.FindPunto(1)).Returns(new PuntoReferencia());
-            var controller = new PuntoController(mockReferencia.Object);
+
+            var controller = new PuntoController(mockReferencia.Object, null);
 
             var events = controller.Edit(1);
             Assert.IsNotNull(events);
@@ -77,11 +83,15 @@ namespace TestNunit
         public void DebePoderEditar()
         {
             var mockReferencia = new Mock<IReferencia>();
+            var mockValidate = new Mock<IVpunto>();
 
             PuntoReferencia punto = new();
+            ModelStateDictionary modelState = new();
 
             mockReferencia.Setup(v => v.FindPunto(1)).Returns(new PuntoReferencia());
-            var controller = new PuntoController(mockReferencia.Object);
+            mockValidate.Setup(v => v.Validate(punto, modelState)).Returns(true);
+
+            var controller = new PuntoController(mockReferencia.Object, mockValidate.Object);
             controller.ViewData.ModelState.Clear();
 
             var events = controller.Edit(1, punto);
@@ -99,7 +109,7 @@ namespace TestNunit
             PuntoReferencia punto = new();
 
             mockReferencia.Setup(v => v.FirstPunto(1)).Returns(new PuntoReferencia());
-            var controller = new PuntoController(mockReferencia.Object);
+            var controller = new PuntoController(mockReferencia.Object, null);
             controller.ViewData.ModelState.Clear();
 
             var events = controller.Delete(1);

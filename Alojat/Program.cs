@@ -38,6 +38,11 @@ builder.Services.AddScoped<IServicio, SServicio>();
 builder.Services.AddScoped<IVservicio, SVservicio>();
 builder.Services.AddScoped<IBusquedad, SBusquedad>();
 builder.Services.AddScoped<IDBusquedad, SDBusquedad>();
+builder.Services.AddScoped<IValidarCampos, SValidarCampos>();
+builder.Services.AddScoped<IVcategoria, SVcategoria>();
+builder.Services.AddScoped<IVpunto, SVpunto>();
+builder.Services.AddScoped<IVusuario, SVusuario>();
+builder.Services.AddScoped<IVlogin, SVlogin>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.   

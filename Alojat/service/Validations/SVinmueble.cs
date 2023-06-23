@@ -1,5 +1,4 @@
-﻿using Alojat.Data;
-using Alojat.interfa;
+﻿using Alojat.interfa;
 using Alojat.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -7,35 +6,24 @@ namespace Alojat.service
 {
     public class SVinmueble : IVinmueble
     {
-        private ModelStateDictionary modelState;
+        ModelStateDictionary modelState;
+
+        private readonly IValidarCampos validarCampos;
+
+        public SVinmueble(IValidarCampos validarCampos)
+        {
+            this.validarCampos = validarCampos;
+        }
 
         public bool Validate(Inmueble inmueble, ModelStateDictionary modelState)
         {
             this.modelState = modelState;
 
-            if (!ValidarImagen(inmueble.NumCelular))
-            {
-                modelState.AddModelError("Celular", "El Celular requerido");
-                return false;
-            }
+            if (!ValididarCoordenadas($"{inmueble.LatitudInmueble},{inmueble.LongitudInmueble}")) return false;
 
-            if (!ValidarImagen(inmueble.DireccionInmueble))
-            {
-                modelState.AddModelError("Dirección", "La dirección requerida");
-                return false;
-            }
+            if (!ValididarDireccion(inmueble.DireccionInmueble)) return false;
 
-            if (!ValidarImagen(inmueble.LatitudInmueble))
-            {
-                modelState.AddModelError("Latitud", "Latitud requerida");
-                return false;
-            }
-
-            if (!ValidarImagen(inmueble.LongitudInmueble))
-            {
-                modelState.AddModelError("Longitud", "Longitud requerida");
-                return false;
-            }
+            if (!ValidarCelular(inmueble.NumCelular)) return false;
 
             if (inmueble.PuntoReferenciaID == 0)
             {
@@ -46,19 +34,61 @@ namespace Alojat.service
             return true;
         }
 
-        public void ValidateUpdate(Inmueble inmueble)
+        bool ValidarCelular(string NumCelular)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(NumCelular))
+            {
+                modelState.AddModelError("Celular", "El Celular es Obligatorio");
+                return false;
+            }
+              
+            if (!validarCampos.ValidarnUMEROS(NumCelular))
+            {
+                modelState.AddModelError("Celular", "Ingrese solo caracteres numericos");
+                return false;
+            }
+             
+            if (NumCelular.Length < 8 || NumCelular.Length > 9)
+            {
+                modelState.AddModelError("Celular", "Ingrese un numero de celular valido");
+                return false;
+            }
+
+            return true;
         }
 
-        bool ValidarImagen(string inmueble)
+        bool ValididarDireccion(string direccionInmueble)
         {
-            return (!string.IsNullOrEmpty(inmueble));
+            if (string.IsNullOrEmpty(direccionInmueble))
+            {
+                modelState.AddModelError("Direccion", "Este Campo es Obligatorio");
+                return false;
+            }
+               
+            if (!validarCampos.ValidarDireccion(direccionInmueble))
+            {
+                modelState.AddModelError("Direccion", "Ingrese una direccion correcta");
+                return false;
+            }
+
+            return true;
         }
 
-        bool ValidarId(int id)
+        bool ValididarCoordenadas(string coodenadas)
         {
-            return (id == 0);
+            if (string.IsNullOrEmpty(coodenadas)) {
+
+                modelState.AddModelError("Coordenadas", "Coordenadas no validas");
+                return false;
+            };
+
+            if (!validarCampos.ValidarCoordenadas(coodenadas))
+            {
+                modelState.AddModelError("Coordenadas", "Coordenadas no validas");
+                return false;
+            }
+
+            return true;
         }
     }
 }

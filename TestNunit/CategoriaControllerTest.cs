@@ -3,6 +3,7 @@ using Moq;
 using Alojat.Models;
 using Alojat.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace TestNunit
 {
@@ -12,11 +13,12 @@ namespace TestNunit
         public void DebeDevolverUnaLista()
         {
             var mockCategoria = new Mock<ICategoria>();
+            var mockValidate = new Mock<IVcategoria>();
 
             List<Categoria> list = new();
 
             mockCategoria.Setup(v => v.LisCategoria()).Returns(list);
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, mockValidate.Object);
 
             var events = controller.Index();
             Assert.IsNotNull(events);
@@ -26,7 +28,8 @@ namespace TestNunit
         [Test]
         public void DebeDevolverUnViewResult()
         {
-            var controller = new CategoriaController(null);
+
+            var controller = new CategoriaController(null, null);
 
             var events = controller.Create();
             Assert.IsNotNull(events);
@@ -37,16 +40,20 @@ namespace TestNunit
         public void DebePoderRegistrarUnCategoria()
         {
             var mockCategoria = new Mock<ICategoria>();
+            var mockValidate = new Mock<IVcategoria>();
 
             Categoria categoria = new()
             {
                 NombreCategoria = "Otro"
             };
 
-            mockCategoria.Setup(v => v.SaveCategoria(categoria));
-            var controller = new CategoriaController(mockCategoria.Object);
-            controller.ViewData.ModelState.Clear();
+            ModelStateDictionary modelState = new();
 
+            mockCategoria.Setup(v => v.SaveCategoria(categoria));
+            mockValidate.Setup(c => c.Validate(categoria, modelState)).Returns(true);
+
+            var controller = new CategoriaController(mockCategoria.Object, mockValidate.Object);
+            controller.ViewData.ModelState.Clear();
 
             var events = controller.Create(categoria) as RedirectToActionResult;
             Assert.IsNotNull(events);
@@ -57,11 +64,14 @@ namespace TestNunit
         public void NoDebePoderRegistrarUnCategoria()
         {
             var mockCategoria = new Mock<ICategoria>();
+            var mockValidate = new Mock<IVcategoria>();
 
             Categoria categoria = new();
+            ModelStateDictionary modelState = new();
 
             mockCategoria.Setup(v => v.SaveCategoria(categoria));
-            var controller = new CategoriaController(mockCategoria.Object);
+            mockValidate.Setup(c => c.Validate(categoria, modelState)).Returns(false);
+            var controller = new CategoriaController(mockCategoria.Object, mockValidate.Object);
             controller.ModelState.AddModelError("", "");
 
             var events = controller.Create(categoria);
@@ -78,7 +88,7 @@ namespace TestNunit
 
             mockCategoria.Setup(v => v.ValidateCategoria(0)).Returns(false);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, null);
 
             var events = controller.Edit(0) as NotFoundResult;
 
@@ -95,7 +105,7 @@ namespace TestNunit
 
             mockCategoria.Setup(v => v.ValidateCategoria(1)).Returns(true);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, null);
 
             var events = controller.Edit(1) as NotFoundResult;
 
@@ -117,7 +127,7 @@ namespace TestNunit
             mockCategoria.Setup(v => v.ValidateCategoria(1)).Returns(true);
             mockCategoria.Setup(c => c.FindCategoria(1)).Returns(categoria);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, null);
 
             var events = controller.Edit(1) as ViewResult;
 
@@ -140,7 +150,7 @@ namespace TestNunit
             mockCategoria.Setup(v => v.ValidateCategoria(1)).Returns(true);
             mockCategoria.Setup(c => c.FindCategoria(1)).Returns(categoria);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, null);
             controller.ModelState.AddModelError("", "");
 
             var events = controller.Edit(2, categoria) as NotFoundResult;
@@ -153,6 +163,7 @@ namespace TestNunit
         public void DebePoderActualizarUnCategoria()
         {
             var mockCategoria = new Mock<ICategoria>();
+            var mockValidate = new Mock<IVcategoria>();
 
             Categoria categoria = new()
             {
@@ -160,10 +171,13 @@ namespace TestNunit
                 NombreCategoria = "otro"
             };
 
+            ModelStateDictionary modelState = new();
+
             mockCategoria.Setup(v => v.ValidateCategoria(1)).Returns(true);
             mockCategoria.Setup(c => c.UpdateCategoria(categoria));
+            mockValidate.Setup(c => c.UpdateCate(categoria,modelState)).Returns(true);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, mockValidate.Object);
             controller.ModelState.Clear();
 
             var events = controller.Edit(1, categoria) as RedirectToActionResult;
@@ -179,7 +193,7 @@ namespace TestNunit
 
             mockCategoria.Setup(v => v.ValidateCategoria(1)).Returns(false);
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object,null);
             controller.ModelState.AddModelError("", "");
 
             var events = controller.Delete(1) as NotFoundResult;
@@ -204,7 +218,7 @@ namespace TestNunit
             mockCategoria.Setup(c => c.FirstCategoria(1)).Returns(categoria);
             mockCategoria.Setup(c => c.RemoveCategoria(categoria));
 
-            var controller = new CategoriaController(mockCategoria.Object);
+            var controller = new CategoriaController(mockCategoria.Object, null);
             controller.ModelState.Clear();
 
             var events = controller.Delete(1) as RedirectToActionResult;

@@ -11,10 +11,12 @@ namespace Alojat.Controllers
     {
         private readonly IUsuario mUsuario;
         private readonly IUserClaim mClaim;
-        public LoginController(IUsuario mUsuario, IUserClaim mClaim)
+        private readonly IVlogin mVusuario;
+        public LoginController(IUsuario mUsuario, IUserClaim mClaim, IVlogin mVusuario)
         {
             this.mUsuario = mUsuario;
             this.mClaim = mClaim;
+            this.mVusuario = mVusuario;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace Alojat.Controllers
         {
             try
             {
-                if (HttpContext.User.Identity is not ClaimsIdentity identity) return NotFound();
+                if (HttpContext.User.Identity is not ClaimsIdentity identity) return View();
 
                 var user = mClaim.GetUser(identity.Claims);
 
@@ -43,26 +45,26 @@ namespace Alojat.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(Usuario usuario)
+        public async Task<IActionResult> Login(LoginModel usuario)
         {
-            var usu = mUsuario.ValidarUsuario(usuario.Email, usuario.Password);
-
-            if (usu != null)
+            if (!mVusuario.Validate(usuario, ModelState))
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usu.Nombres),
-                    new Claim(ClaimTypes.Email, usu.Email),
-                    new Claim(ClaimTypes.Role, usu.Rol.DescripcionRol),
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home");
+                return View();
             }
 
-            return View();
+            var usu = mUsuario.ValidarUsuario(usuario.Email, usuario.Password);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, usu.Nombres),
+                new Claim(ClaimTypes.Email, usu.Email),
+                new Claim(ClaimTypes.Role, usu.Rol.DescripcionRol),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()
@@ -77,15 +79,16 @@ namespace Alojat.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registro(Usuario usuario)
+        public IActionResult Registro(RegistroUsuario usuario)
         {
-            if (ModelState.IsValid)
+            if (!mVusuario.Register(usuario, ModelState))
             {
-                mUsuario.SaveUsuarioRegistro(usuario);
-                return RedirectToAction("Login", "Login");
+                return View();
             }
 
-            return View();
+            mUsuario.SaveUsuarioRegistro(usuario);
+            return RedirectToAction("Login", "Login");
+          
         }
     }
 }

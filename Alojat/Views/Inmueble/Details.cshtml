@@ -54,12 +54,12 @@
                              <input hidden asp-for="InmuebleID" class="form-control" />
                             <input hidden asp-for="UsuarioID" class="form-control" />
                             <input asp-for="DireccionInmueble" class="form-control" />
-                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Dirección")</strong></p>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Direccion")</strong></p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Longitud</label>
                             <input id="longitud" asp-for="LongitudInmueble" class="form-control" />
-                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Longitud")</strong></p>
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Coordenadas")</strong></p>
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-6">
@@ -68,19 +68,16 @@
                             <label asp-for="NumCelular" class="control-label"></label>
                             <input type="tel" asp-for="NumCelular" class="form-control" />
                             <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Celular")</strong></p>
-                            @* <span asp-validation-for="NumCelular" class="text-danger"></span>*@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Punto de Referencia</label>
                             <select asp-for="PuntoReferenciaID" class="form-control" asp-items="ViewBag.PuntoReferenciaID"></select>
-                            @*<span asp-validation-for="PuntoReferenciaID" class="text-danger"></span>*@
                             <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Punto")</strong></p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Latitud</label>
                             <input id="latitud" asp-for="LatitudInmueble" class="form-control" />
-                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Latitud")</strong></p>
-                            @*  <span asp-validation-for="LatitudInmueble" class="text-danger"></span>*@
+                            <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Coordenadas")</strong></p>                          
                         </div>
                     </div>
                 </div>
@@ -116,7 +113,7 @@
 
         marcador = new google.maps.Marker({
             map: mapa,
-            draggable: false,
+            draggable: true,
             position: new google.maps.LatLng(coordenas.lat, coordenas.lng)
         });
 
