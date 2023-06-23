@@ -10,11 +10,13 @@ namespace Alojat.Controllers
     {
         private readonly IUsuario mUsuario;
         private readonly IRol mRol;
+        private readonly IVusuario mVsuario;
 
-        public UsuarioController(IUsuario mUsuario, IRol mRol)
+        public UsuarioController(IUsuario mUsuario, IRol mRol, IVusuario mVsuario)
         {
             this.mUsuario = mUsuario;
             this.mRol = mRol;
+            this.mVsuario = mVsuario;
         }
 
         [Authorize(Roles = "Admin")]
@@ -42,11 +44,11 @@ namespace Alojat.Controllers
         [HttpPost]
         public IActionResult Registro(Usuario usuario)
         {
-            if (!ModelState.IsValid)
+            if (!mVsuario.Validate(usuario,ModelState))
             {
                 ViewBag.roles = mRol.ListRoles();
 
-                return View();
+                return View(usuario);
             }
 
             mUsuario.SaveUsuario(usuario);
@@ -77,12 +79,14 @@ namespace Alojat.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Editar(Usuario usuario)
         {
-            if (!ModelState.IsValid)
+            if (!mVsuario.UpdateCate(usuario, ModelState))
             {
                 ViewBag.roles = mRol.ListRoles();
 
                 return View(usuario);
             }
+
+            var up = mUsuario.FindUsuario(usuario.UsuarioID);
 
             mUsuario.UpdateUsuario(usuario);
 
@@ -90,7 +94,6 @@ namespace Alojat.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
         public IActionResult Eliminar(int ID)
         {
             try
@@ -110,14 +113,20 @@ namespace Alojat.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateCont(Usuario usuario)
+        public IActionResult UpdateCont(UserUpdate usuario)
         {
-            if (!ModelState.IsValid)
+            if(usuario.UsuarioID == 0)    return RedirectToAction("Index", "Usuario");
+
+            if (!mVsuario.UpdatePass(usuario,ModelState))
             {
-                return RedirectToAction("Index", "Usuario");
+                ViewBag.roles = mRol.ListRoles();
+
+                var user = mUsuario.FindUsuario(usuario.UsuarioID);
+
+                return View("Editar", user);
             }
 
-            mUsuario.UpdateUsuario(usuario);
+            mUsuario.UpdateUsuarioPass(usuario);
             return RedirectToAction("Index", "Usuario");
         }
     }

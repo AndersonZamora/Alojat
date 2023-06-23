@@ -2,17 +2,18 @@
 using Alojat.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Alojat.Controllers
 {
     public class CategoriaController : Controller
     {
         private readonly ICategoria mCategoria;
+        private readonly IVcategoria mVcategoria;
 
-        public CategoriaController(ICategoria mCategoria)
+        public CategoriaController(ICategoria mCategoria, IVcategoria mVcategoria)
         {
             this.mCategoria = mCategoria;
+            this.mVcategoria = mVcategoria;
         }
 
         [Authorize(Roles = "Admin")]
@@ -32,13 +33,14 @@ namespace Alojat.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("CategoriaID,NombreCategoria")] Categoria categoria)
         {
-            if (ModelState.IsValid)
+            if (!mVcategoria.Validate(categoria,ModelState))
             {
-                mCategoria.SaveCategoria(categoria);
-                return RedirectToAction(nameof(Index));
+                return View(categoria);
             }
 
-            return View(categoria);
+            mCategoria.SaveCategoria(categoria);
+            return RedirectToAction(nameof(Index));
+
         }
 
         [Authorize(Roles = "Admin")]
@@ -70,13 +72,13 @@ namespace Alojat.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!mVcategoria.UpdateCate(categoria, ModelState))
             {
-                mCategoria.UpdateCategoria(categoria);
-                return RedirectToAction(nameof(Index));
+                return View("Edit", categoria);
             }
 
-            return View(categoria);
+            mCategoria.UpdateCategoria(categoria);
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Admin")]
@@ -88,7 +90,6 @@ namespace Alojat.Controllers
             }
 
             var categoria = mCategoria.FirstCategoria(id);
-
             mCategoria.RemoveCategoria(categoria);
 
             return RedirectToAction(nameof(Index));

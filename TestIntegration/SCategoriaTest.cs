@@ -2,7 +2,7 @@
 using Alojat.service;
 
 
-namespace TestIntegration.CategoriaTest
+namespace TestIntegration
 {
     [TestFixture]
     public class SCategoriaTest
@@ -28,8 +28,6 @@ namespace TestIntegration.CategoriaTest
         public void TestFindCategoria()
         {
             var Id = 1;
-
-            var categoria = new Categoria() { NombreCategoria = "Prueba 1" };
 
             var fixture = new SharedDatabaseFixtureTest();
 

@@ -92,7 +92,7 @@ namespace Alojat.Controllers
             {
                 if (!mValidate.Validate(servicio, ModelState))
                 {
-                    ViewData["CategoriaID"] = new SelectList(mCategoria.LisCategoria(), servicio.CategoriaID);
+                    ViewData["CategoriaID"] = new SelectList(mCategoria.LisCategoria(), "CategoriaID", "NombreCategoria", servicio.CategoriaID);
                     ViewData["InmuebleID"] = new SelectList(mInmueble.ListInmueRefe(), "InmuebleID", "DireccionInmueble");
                     return View(servicio);
                 }
@@ -158,15 +158,16 @@ namespace Alojat.Controllers
             {
                 if (!mValidate.Validate(servicio, ModelState))
                 {
-                    ViewData["CategoriaID"] = new SelectList(mCategoria.LisCategoria(), servicio.CategoriaID);
-                    ViewData["InmuebleID"] = mInmueble.SelectLis(servicio.InmuebleID);
-                    return View(servicio);
+                    ViewData["CategoriaID"] = new SelectList(mCategoria.LisCategoria(), "CategoriaID", "NombreCategoria", servicio.CategoriaID);
+                    ViewData["InmuebleID"] = new SelectList(mInmueble.ListInmueRefe(), "InmuebleID", "DireccionInmueble", servicio.InmuebleID);
+
+                    return View("Details", servicio);
                 }
 
                 mServicio.UpdateServicio(servicio);
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
                 return NotFound();
             }

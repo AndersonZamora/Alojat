@@ -54,7 +54,7 @@ namespace Alojat.Controllers
         [Authorize(Roles = "Admin,Propietario")]
         public ViewResult Create()
         {
-            ViewData["PuntoReferencia"] = new SelectList(mReferencia.ListReferen(), "PuntoReferenciaID", "NombrePuntoReferencia");
+            ViewData["PuntoReferencia"] = new SelectList(mReferencia.LisReferencia(), "PuntoReferenciaID", "NombrePuntoReferencia");
             return View();
         }
 
@@ -72,7 +72,7 @@ namespace Alojat.Controllers
 
                 if (!mValidate.Validate(inmueble, ModelState))
                 {
-                    ViewData["PuntoReferencia"] = new SelectList(mReferencia.ListReferen(), "PuntoReferenciaID", "NombrePuntoReferencia", inmueble.PuntoReferenciaID);
+                    ViewData["PuntoReferencia"] = new SelectList(mReferencia.LisReferencia(), "PuntoReferenciaID", "NombrePuntoReferencia", inmueble.PuntoReferenciaID);
                     return View("Create", inmueble);
                 }
 
@@ -103,7 +103,7 @@ namespace Alojat.Controllers
             {
                 var inmueble = mInmueble.FindInmu(id);
 
-                ViewData["PuntoReferenciaID"] = new SelectList(mReferencia.ListReferen(), "PuntoReferenciaID", "NombrePuntoReferencia", inmueble.PuntoReferenciaID);
+                ViewData["PuntoReferenciaID"] = new SelectList(mReferencia.LisReferencia(), "PuntoReferenciaID", "NombrePuntoReferencia", inmueble.PuntoReferenciaID);
 
                 return View(inmueble);
             }
@@ -138,7 +138,10 @@ namespace Alojat.Controllers
             {
                 if (!mValidate.Validate(inmueble, ModelState))
                 {
-                    return RedirectToAction(nameof(Index));
+                    var inmueb = mInmueble.FindInmu(inmueble.InmuebleID);
+
+                    ViewData["PuntoReferenciaID"] = new SelectList(mReferencia.LisReferencia(), "PuntoReferenciaID", "NombrePuntoReferencia", inmueble.PuntoReferenciaID);
+                    return View("Details", inmueble);
                 }
 
                 mInmueble.UpdateInmueble(inmueble);

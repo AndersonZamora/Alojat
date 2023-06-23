@@ -87,7 +87,7 @@ namespace TestNunit
 
             var mockIReferencia = new Mock<IReferencia>();
 
-            mockIReferencia.Setup(c => c.ListReferen()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
+            mockIReferencia.Setup(c => c.LisReferencia()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
 
             var controller = new InmuebleController(null, null, null, mockIReferencia.Object, null, null);
 
@@ -122,16 +122,14 @@ namespace TestNunit
             var mockValidate = new Mock<IVinmueble>();
 
             Inmueble inmueble = new();
-            //var stream = new MemoryStream();
 
             ModelStateDictionary modelState = new();
 
-            mockIReferencia.Setup(c => c.ListReferen()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
+            mockIReferencia.Setup(c => c.LisReferencia()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
             mockClaim.Setup(c => c.GetUser(principal.Claims)).Returns(new ClaimsIdent() { Email = "admin@gmail.com", Name = "admin", Role = "Admin" });
             mockUsuario.Setup(u => u.FirstOr("admin@gmail.com")).Returns(usuario);
             mockValidate.Setup(v => v.Validate(inmueble, modelState)).Returns(true);
             mockInmueble.Setup(i => i.SaveInmueble(inmueble));
-            //IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", "imagen.png");
 
             var controller = new InmuebleController(mockInmueble.Object, mockUsuario.Object, mockClaim.Object, mockIReferencia.Object, mockValidate.Object, null)
             {
@@ -157,7 +155,7 @@ namespace TestNunit
             var mockInmueble = new Mock<IInmueble>();
             var mockIReferencia = new Mock<IReferencia>();
 
-            mockIReferencia.Setup(c => c.ListReferen()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
+            mockIReferencia.Setup(c => c.LisReferencia()).Returns(new List<PuntoReferencia>() { new PuntoReferencia() });
             mockInmueble.Setup(c => c.FindInmu(1)).Returns(new Inmueble());
 
             var controller = new InmuebleController(mockInmueble.Object, null, null, mockIReferencia.Object, null, null);

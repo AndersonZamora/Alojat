@@ -18,7 +18,7 @@
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label asp-for="NombreCategoria" class="control-label"></label>
                                 <input asp-for="NombreCategoria" class="form-control" />
-                                <span asp-validation-for="NombreCategoria" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Categ")</strong></p>
                                 <input type="submit" value="Actualizar" class="btn btn-primary btn-user btn-block mt-4"/>
                             </div>
                         </div>

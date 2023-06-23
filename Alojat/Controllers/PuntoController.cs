@@ -8,10 +8,12 @@ namespace Alojat.Controllers
     public class PuntoController : Controller
     {
         private readonly IReferencia mReferencia;
+        private readonly IVpunto mVpunto;
 
-        public PuntoController(IReferencia mReferencia)
+        public PuntoController(IReferencia mReferencia, IVpunto mVpunto)
         {
             this.mReferencia = mReferencia;
+            this.mVpunto = mVpunto;
         }
 
         [Authorize(Roles = "Admin")]
@@ -56,7 +58,7 @@ namespace Alojat.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!mVpunto.Validate(puntoReferencia,ModelState))
                 {
                     return View(puntoReferencia);
                 }
@@ -92,9 +94,9 @@ namespace Alojat.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!mVpunto.Validate(puntoReferencia, ModelState))
                 {
-                    return View(puntoReferencia);
+                    return View("Edit", puntoReferencia);
                 }
 
                 mReferencia.UpdatePunto(puntoReferencia);

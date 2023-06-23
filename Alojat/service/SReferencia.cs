@@ -35,11 +35,6 @@ namespace Alojat.service
             return dbContext.PuntoReferencia.ToList();
         }
 
-        public List<PuntoReferencia>  ListReferen()
-        {
-            return dbContext.PuntoReferencia.ToList();
-        }
-
         public void RemovePunto(PuntoReferencia referencia)
         {
             dbContext.PuntoReferencia.Remove(referencia);

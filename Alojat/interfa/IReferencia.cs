@@ -12,6 +12,5 @@ namespace Alojat.interfa
         void UpdatePunto(PuntoReferencia referencia);
         void RemovePunto(PuntoReferencia referencia);
         bool ExistsPunto(int id);
-        List<PuntoReferencia> ListReferen();
     }
 }

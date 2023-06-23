@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Alojat.interfa
 {
-    public interface IVinmueble
+    public interface IVpunto
     {
-        bool Validate(Inmueble inmueble, ModelStateDictionary modelState);
+        bool Validate(PuntoReferencia punto, ModelStateDictionary modelState);
     }
 }

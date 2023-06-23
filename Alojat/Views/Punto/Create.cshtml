@@ -18,24 +18,24 @@
                             <div class="mb-3">
                                 <label class="form-label">Nombre</label>
                                 <input asp-for="NombrePuntoReferencia" class="form-control" />
-                                <span asp-validation-for="NombrePuntoReferencia" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Nombre")</strong></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Latitud</label>
                                 <input  id="latitud" name="Latitud" asp-for="Latitud" class="form-control" />
-                                <span asp-validation-for="Latitud" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Coordenadas")</strong></p>
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Dirección</label>
                                 <input asp-for="DireccionReferencia" class="form-control" />
-                                <span asp-validation-for="DireccionReferencia" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Direccion")</strong></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Logitud</label>
                                 <input  id="longitud" name="Longitud" asp-for="Longitud" class="form-control" />
-                                <span asp-validation-for="Longitud" class="text-danger"></span>
+                                <p><strong style="color:red; font-size:14px">@Html.ValidationMessage("Coordenadas")</strong></p>
                             </div>
                             <br />
                         </div>
