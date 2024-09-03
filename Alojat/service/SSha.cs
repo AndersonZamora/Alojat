@@ -27,14 +27,14 @@ namespace Alojat.service
             try
             {
                 string email = "tu email firebase";
-                string clave = "ander123";
+                string clave = "contraseña";
                 string ruta = "Alojat";
-                string api_key = "TU_API_KEY";
+                string api_key = "tu api key;
 
                 var config = new FirebaseAuthConfig
                 {
                     ApiKey = api_key,
-                    AuthDomain = "lobos-marinos.firebaseapp.com",
+                    AuthDomain = "tu dominio",
                     Providers = new FirebaseAuthProvider[]
                     {
                         new GoogleProvider().AddScopes(email),
@@ -50,7 +50,7 @@ namespace Alojat.service
                 var token = await user.GetIdTokenAsync();
 
                 var task = new FirebaseStorage(
-                    "lobos-marinos.appspot.com",
+                    "tu dominio",
                      new FirebaseStorageOptions
                      {
                          AuthTokenAsyncFactory = () => Task.FromResult(token),
